@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sample Search</title>
+  <meta name="description" content="A simple Google‑style search homepage UI for demos." />
+  <style>
+    :root{
+      --bg:#fff;--fg:#202124;--muted:#5f6368;--card:#fff;--border:#dadce0;--shadow:0 1px 2px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.06);
+      --btn-bg:#f8f9fa;--btn-bg-hover:#f1f3f4;--link:#1a73e8;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#1a1c1f;--fg:#e8eaed;--muted:#9aa0a6;--card:#202124;--border:#3c4043;--shadow:none;--btn-bg:#2f3135;--btn-bg-hover:#3a3d42;--link:#8ab4f8}
+    }
+    html,body{height:100%}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,Apple Color Emoji,Segoe UI Emoji,sans-serif;background:var(--bg);color:var(--fg);display:flex;flex-direction:column}
+    header,footer{display:flex;align-items:center;justify-content:flex-end;gap:.75rem;padding:.75rem 1rem}
+    header a, footer a{color:var(--fg);text-decoration:none;font-size:.9rem}
+    header a:hover, footer a:hover{text-decoration:underline}
+    .avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#4285F4,#34A853);display:inline-block}
+
+    main{flex:1;display:flex;align-items:center;justify-content:center}
+    .wrap{width:min(680px,92vw);text-align:center}
+
+    .logo{font-size:4.25rem;line-height:1;margin-bottom:1.25rem;font-weight:700;letter-spacing:.5px}
+    .logo span:nth-child(1){color:#4285F4}
+    .logo span:nth-child(2){color:#EA4335}
+    .logo span:nth-child(3){color:#FBBC05}
+    .logo span:nth-child(4){color:#4285F4}
+    .logo span:nth-child(5){color:#34A853}
+    .logo span:nth-child(6){color:#EA4335}
+
+    .search{display:flex;align-items:center;gap:.5rem;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:.5rem 1rem;box-shadow:var(--shadow)}
+    .search:focus-within{box-shadow:0 1px 2px rgba(26,115,232,.3),0 0 0 2px rgba(26,115,232,.15);border-color:#1a73e8}
+    .search input{flex:1;border:0;background:transparent;color:var(--fg);font-size:1.05rem;outline:0;padding:.35rem}
+    .icon{width:20px;height:20px;opacity:.65}
+    .kbd{border:1px solid var(--border);border-bottom-width:2px;border-radius:4px;padding:.05rem .35rem;font-size:.75rem;color:var(--muted)}
+
+    .actions{margin:1.25rem auto 0;display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap}
+    .btn{background:var(--btn-bg);border:1px solid var(--border);border-radius:6px;padding:.55rem 1rem;cursor:pointer;color:var(--fg);font-size:.95rem}
+    .btn:hover{background:var(--btn-bg-hover)}
+
+    .chips{margin-top:1rem;display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}
+    .chip{font-size:.85rem;border:1px solid var(--border);padding:.35rem .6rem;border-radius:999px;color:var(--muted)}
+
+    footer{justify-content:space-between;border-top:1px solid var(--border);flex-wrap:wrap}
+    .row{display:flex;gap:.75rem;flex-wrap:wrap}
+
+    .results{max-width:680px;margin:2rem auto;display:none}
+    .result{padding:1rem 0;border-top:1px solid var(--border)}
+    .result a{color:var(--link);text-decoration:none}
+    .result a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <header>
+    <a href="#">Gmail</a>
+    <a href="#">Images</a>
+    <div class="avatar" title="You"></div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="logo" aria-label="Sample logo">
+        <span>S</span><span>e</span><span>a</span><span>r</span><span>c</span><span>h</span>
+      </div>
+
+      <form class="search" id="searchForm" role="search" aria-label="Sample search">
+        <!-- magnifying glass -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.471 6.471 0 0 0 1.57-4.23 6.5 6.5 0 1 0-6.5 6.5 6.471 6.471 0 0 0 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input id="q" name="q" type="search" placeholder="Search" autocomplete="off" aria-label="Search" />
+        <!-- mic -->
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v5a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 14 0h-2zM11 19h2v3h-2z"/></svg>
+        <span class="kbd" title="Press Enter to search">Enter</span>
+      </form>
+
+      <div class="actions">
+        <button class="btn" id="btnSearch">Sample Search</button>
+        <button class="btn" id="btnLucky">I'm Feeling Lucky</button>
+      </div>
+
+      <div class="chips">
+        <span class="chip">All</span>
+        <span class="chip">Images</span>
+        <span class="chip">Videos</span>
+        <span class="chip">News</span>
+        <span class="chip">Maps</span>
+      </div>
+
+      <section class="results" id="results" aria-live="polite"></section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="row">
+      <a href="#">About</a>
+      <a href="#">Advertising</a>
+      <a href="#">Business</a>
+      <a href="#">How Search works</a>
+    </div>
+    <div class="row">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Settings</a>
+    </div>
+  </footer>
+
+  <script>
+    // Minimal demo logic – no external calls. Shows fake results.
+    const form = document.getElementById('searchForm');
+    const input = document.getElementById('q');
+    const results = document.getElementById('results');
+    const btnSearch = document.getElementById('btnSearch');
+    const btnLucky = document.getElementById('btnLucky');
+
+    function renderResults(query){
+      const sample = [
+        {
+          title:`What is "${query}"?`,
+          url:'#',
+          desc:'This is a placeholder result. Replace with your own search backend or redirect to a real engine.'
+        },
+        {
+          title:`Build a search UI in HTML/CSS/JS`,
+          url:'#',
+          desc:'A minimal, accessible search box with buttons, chips, and a results list.'
+        },
+        {
+          title:'Add your own results provider',
+          url:'#',
+          desc:'Hook up fetch() to your API, or change form action to point at a real search endpoint.'
+        }
+      ];
+
+      results.innerHTML = sample.map(r => `
+        <article class="result">
+          <a href="${r.url}"><h3>${r.title}</h3></a>
+          <div style="color:var(--muted);font-size:.9rem">${r.url.replace('#','example.com')}</div>
+          <p style="margin:.35rem 0 0 .0">${r.desc}</p>
+        </article>
+      `).join('');
+      results.style.display = 'block';
+      results.scrollIntoView({behavior:'smooth'});
+    }
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const q = input.value.trim();
+      if(!q) return input.focus();
+      renderResults(q);
+    });
+
+    btnSearch.addEventListener('click', () => {
+      const q = input.value.trim() || 'sample query';
+      renderResults(q);
+    });
+
+    btnLucky.addEventListener('click', () => {
+      // Simple demo – jump to a neutral, built‑in search provider with the current query.
+      const q = encodeURIComponent(input.value.trim() || 'sample');
+      window.location.href = `https://duckduckgo.com/?q=${q}`;
+    });
+
+    // Keyboard hint: focus input on load
+    window.addEventListener('load', () => input.focus());
+  </script>
+</body>
+</html>
