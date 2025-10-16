@@ -44,5 +44,25 @@
       <p class="note">This is a demo UI that posts to Google. No tracking, no extra scripts.</p>
     </form>
   </main>
+  <script type='text/javascript'>
+	function initEmbeddedMessaging() {
+		try {
+			embeddedservice_bootstrap.settings.language = 'en_US'; // For example, enter 'en' or 'en-US'
+
+			embeddedservice_bootstrap.init(
+				'00Dd500000AyELt',
+				'External_Website_ESD',
+				'https://sendservices.my.site.com/ESWExternalWebsiteESD1760597753904',
+				{
+					scrt2URL: 'https://sendservices.my.salesforce-scrt.com'
+				}
+			);
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+	};
+</script>
+<script type='text/javascript' src='https://sendservices.my.site.com/ESWExternalWebsiteESD1760597753904/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+
 </body>
 </html>
